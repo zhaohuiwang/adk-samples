@@ -19,7 +19,7 @@ Follow these steps to set up and run the sample agents:
     *   **Set Up Environment Variables:** Each agent example relies on a `.env` file for configuration (like API keys, Google Cloud project IDs, and location). This keeps secrets out of the code.
         *   You will need to create a `.env` file in each agent's directory you wish to run (usually by copying the provided `.env.example`).
         *   Setting up these variables, especially obtaining Google Cloud credentials, requires careful steps. Refer to the **Environment Setup** section in the [ADK Installation Guide](https://google.github.io/adk-docs/docs/get-started/) for detailed instructions.
-    *   **Google Cloud Project (Recommended):** While some agents might run locally with just an API key, most leverage Google Cloud services like Vertex AI and BigQuery. A configured Google Cloud project is highly recommended. See the [ADK Quickstart](https://google.github.io/adk/get_started/quickstart/) for setup details.
+    *   **Google Cloud Project (Recommended):** While some agents might run locally with just an API key, most leverage Google Cloud services like Vertex AI and BigQuery. A configured Google Cloud project is highly recommended. See the [ADK Quickstart](https://google.github.io/adk-docs/get_started/quickstart/) for setup details.
 
 
 2.  **Clone this repository:**
@@ -43,7 +43,7 @@ You can install the ADK samples via cloning it from the public repository by
     Browse the folders in this repository. Each agent and tool have its own `README.md` file with detailed instructions.
 
 **Notes:**
-* These agents have been built and tested using [Google models](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models) on Vertex AI. You can test these samples with other models as well. Please refer to [ADK Tutorials](https://github.com/google/adk-docs/blob/main/docs/agents/models.md) of to use other models for these samples. 
+* These agents have been built and tested using [Google models](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models) on Vertex AI. You can test these samples with other models as well. Please refer to [ADK Tutorials](https://github.com/google/adk-docs/blob/main/docs/agents/models.md) to use other models for these samples. 
 
 ## 🧱 Repository Structure
 ```bash
