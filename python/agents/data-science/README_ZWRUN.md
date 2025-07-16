@@ -458,3 +458,8 @@ This agent sample is provided for illustrative purposes only and is not intended
 This sample has not been rigorously tested, may contain bugs or limitations, and does not include features or optimizations typically required for a production environment (e.g., robust error handling, security measures, scalability, performance considerations, comprehensive logging, or advanced configuration options).
 
 Users are solely responsible for any further development, testing, security hardening, and deployment of agents based on this sample. We recommend thorough review, testing, and the implementation of appropriate safeguards before using any derived agent in a live or critical system.
+
+
+### Issues (found by ZW)
+- `adk-samples/python/agents/data-science/data_science/sub_agents/bigquery/prompts.py` line 26-31 for `NL2SQL_METHOD` variable, the else statement is redudent as a default was given to os.getenv() which is in the if statement.
+-  
