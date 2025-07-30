@@ -9,15 +9,11 @@ from typing import Dict, List, Union
 from google.adk.tools.tool_context import ToolContext
 from vertexai import rag
 
-from ..config import (
-    DEFAULT_CHUNK_OVERLAP,
-    DEFAULT_CHUNK_SIZE,
-    DEFAULT_EMBEDDING_REQUESTS_PER_MIN,
-    DEFAULT_DISTANCE_THRESHOLD,
-    DEFAULT_TOP_K,
-)
+
+from ..config import MetadataConfigSchema
 from .utils import check_corpus_exists, get_corpus_resource_name
 
+cfg = MetadataConfigSchema()
 
 def add_data(
     corpus_name: str,
@@ -118,17 +114,18 @@ def add_data(
         # Set up chunking configuration
         transformation_config = rag.TransformationConfig(
             chunking_config=rag.ChunkingConfig(
-                chunk_size=DEFAULT_CHUNK_SIZE,
-                chunk_overlap=DEFAULT_CHUNK_OVERLAP,
+                chunk_size=cfg.DEFAULT_CHUNK_SIZE,
+                chunk_overlap=cfg.DEFAULT_CHUNK_OVERLAP,
             ),
         )
 
         # Import files to the corpus
+        # https://github.com/googleapis/python-aiplatform/blob/main/vertexai/rag/rag_data.py
         import_result = rag.import_files(
             corpus_resource_name,
             validated_paths,
             transformation_config=transformation_config,
-            max_embedding_requests_per_min=DEFAULT_EMBEDDING_REQUESTS_PER_MIN,
+            max_embedding_requests_per_min=cfg.DEFAULT_EMBEDDING_REQUESTS_PER_MIN,
         )
 
         # Set this as the current corpus if not already set
@@ -164,7 +161,7 @@ Tool for creating a new Vertex AI RAG corpus.
 """
 
 
-# if you type "I want to create a new knowledge store called business" into prompt, the agent will generate generate a corpus and assign it as `business`.
+# if you type "I want to create a new knowledge store called business" into prompt, the agent will generate a corpus and assign it as `business`.
 def create_corpus(
     corpus_name: str,
     tool_context: ToolContext,
@@ -195,8 +192,7 @@ def create_corpus(
         # Configure embedding model
         embedding_model_config = rag.RagEmbeddingModelConfig(
             vertex_prediction_endpoint=rag.VertexPredictionEndpoint(
-                publisher_model=DEFAULT_EMBEDDING_MODEL
-                # specified in `config.py` in root dir
+                publisher_model=cfg.DEFAULT_EMBEDDING_MODEL
             )
         )
 
@@ -298,11 +294,6 @@ def delete_corpus(
 """
 Tool for deleting a specific document from a Vertex AI RAG corpus.
 """
-
-from google.adk.tools.tool_context import ToolContext
-from vertexai import rag
-
-from .utils import check_corpus_exists, get_corpus_resource_name
 
 
 def delete_document(
@@ -455,6 +446,10 @@ Tool for listing all available Vertex AI RAG corpora.
 def list_corpora() -> dict:
     """
     List all available Vertex AI RAG corpora.
+    GCP console > Vertex AI > RAG Enginee for all copora
+    There are two names, for example
+    Display Name: Alphabet_10K_2024_corpus
+    Resource Name: projects/<project-id>/locations/us-central1/ragCorpora/4611686018427387904
 
     Returns:
         dict: A list of available corpora and status, with each corpus containing:
@@ -532,12 +527,14 @@ def rag_query(
         # Configure retrieval parameters
         rag_retrieval_config = rag.RagRetrievalConfig(
             # return the top k most closest data
-            top_k=DEFAULT_TOP_K,
+            top_k=cfg.DEFAULT_TOP_K,
             # vector distance score usually in [0,1]
-            filter=rag.Filter(vector_distance_threshold=DEFAULT_DISTANCE_THRESHOLD),
+            filter=rag.Filter(vector_distance_threshold=cfg.DEFAULT_DISTANCE_THRESHOLD),
         )
 
         # Perform the query
+        # https://github.com/googleapis/python-aiplatform/blob/main/vertexai/rag/rag_retrieval.py
+        
         print("Performing retrieval query...")
         response = rag.retrieval_query(
             rag_resources=[

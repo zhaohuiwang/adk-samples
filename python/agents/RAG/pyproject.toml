@@ -3,8 +3,7 @@ name = "rag"
 version = "0.1.0"
 description = "Answer questions related to Vertex AI documentation using Vertex AI RAG Engine"
 authors = [
-        { name = "Hangfei Lin", email = "hangfei@google.com" },
-        { name = "Chouaieb Nemri", email = "nemri@google.com" },
+        { name = "Zhaohui Wang", email = "ezhwang@gmail.com" }
 ]
 
 license = "Apache License 2.0"
@@ -22,6 +21,7 @@ google-cloud-aiplatform = { extras = [
         "agent-engines",
 ], version = "^1.93.0" }
 llama-index = "^0.12"
+pydantic = "^2.11.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"

@@ -23,8 +23,8 @@ from vertexai import rag
 env_file_path = Path(__file__).parent.parent.parent / ".env"
 print(env_file_path)
 
-# Load environment variables from the specified .env file
-load_dotenv(dotenv_path=env_file_path)
+# Loads the variables from .env into os.environ
+load_dotenv(dotenv_path=env_file_path) 
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 corpus_name = os.getenv("BQML_RAG_CORPUS_NAME")

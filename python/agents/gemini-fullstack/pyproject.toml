@@ -10,6 +10,7 @@ authors = [
     {name = "Lavi Nigam", email = "lavinigam@google.com"},
 ]
 dependencies = [
+    "agent-starter-pack>=0.10.0",
     "google-adk==1.4.2",
 ]
 
