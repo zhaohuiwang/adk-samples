@@ -33,10 +33,12 @@ playground:
 	uv run adk web --port 8501
 
 lint:
+	uv sync --dev --extra lint
 	uv run codespell
 	uv run ruff check . --diff
 	uv run ruff format . --check --diff
 	uv run mypy .
+<<<<<<< HEAD
 # codespell Runs the codespell tool, which checks for common spelling mistakes in code and documentation.
 # ruff check . Runs ruff, a fast Python linter, to check for code style and potential errors in all files in the current directory (.).
 # --diff: Outputs the changes needed to fix linting issues in a diff format, without applying them.
@@ -44,3 +46,8 @@ lint:
 # --check Checks if files are formatted correctly without modifying them.
 # --diff Outputs a diff of the changes needed to format the code properly.
 # mypy . Runs mypy, a static type checker for Python, on all files in the current directory to check for type-related errors.
+=======
+
+deploy-infra:
+	echo "Skipping: Infra not required"
+>>>>>>> main
