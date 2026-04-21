@@ -215,6 +215,10 @@ bin/
 # Local VSCode settings
 .vscode/
 
+# Gemini CLI
+GEMINI.md
+*plan.md
+
 # Claude Code
 .claude/
 
@@ -223,3 +227,9 @@ bin/
 
 # ADK
 .adk/
+go/agents/sail-researcher/researcher
+go/agents/sail-researcher/vendor/*
+go/agents/sail-researcher/server
+
+# Temporary Files for Agent Engine Deployment
+**/*_tmp*/

@@ -1,4 +1,4 @@
-# ADK Bidi-streaming Demo
+# ADK Gemini Live API Toolkit Demo
 
 A working demonstration of real-time bidirectional streaming with Google's Agent Development Kit (ADK). This FastAPI application showcases WebSocket-based communication with Gemini models, supporting multimodal requests (text, audio, and image/video input) and flexible responses (text or audio output).
 
@@ -58,6 +58,32 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 ## Installation
 
+### Agent Starter Pack (Recommended)
+
+Use the [Agent Starter Pack](https://goo.gle/agent-starter-pack) to create a production-ready version of this agent with additional deployment options. The easiest way is with `uvx` (no install needed).
+
+```bash
+uvx agent-starter-pack create my-bidi-demo -a adk@bidi-demo
+```
+
+<details>
+<summary>Alternative: Using pip and a virtual environment</summary>
+
+```bash
+# Create and activate a virtual environment
+python -m venv .venv && source .venv/bin/activate # On Windows: .venv\Scripts\activate
+
+# Install the starter pack and create your project
+pip install --upgrade agent-starter-pack
+agent-starter-pack create my-bidi-demo -a adk@bidi-demo
+```
+
+</details>
+
+The starter pack will prompt you to select deployment options and provides additional production-ready features including automated CI/CD deployment scripts.
+
+### Manual Setup
+
 ### 1. Navigate to Demo Directory
 
 ```bash
@@ -99,7 +125,7 @@ GOOGLE_API_KEY=your_api_key_here
 
 # Model selection (optional, defaults to native audio model)
 # See "Supported Models" section below for available model names
-DEMO_AGENT_MODEL=gemini-2.5-flash-native-audio-preview-09-2025
+DEMO_AGENT_MODEL=gemini-2.5-flash-native-audio-preview-12-2025
 ```
 
 #### Getting API Credentials
@@ -278,7 +304,7 @@ The agent is defined in a separate module following ADK best practices:
 ```python
 agent = Agent(
     name="google_search_agent",
-    model=os.getenv("DEMO_AGENT_MODEL", "gemini-2.5-flash-native-audio-preview-09-2025"),
+    model=os.getenv("DEMO_AGENT_MODEL", "gemini-2.5-flash-native-audio-preview-12-2025"),
     tools=[google_search],
     instruction="You are a helpful assistant that can search the web."
 )
@@ -323,8 +349,8 @@ The WebSocket endpoint implements the complete bidirectional streaming pattern:
 The demo supports any Gemini model compatible with Live API:
 
 **Native Audio Models** (recommended for voice):
-- `gemini-2.5-flash-native-audio-preview-09-2025` (Gemini Live API)
-- `gemini-live-2.5-flash-preview-native-audio-09-2025` (Vertex AI)
+- `gemini-2.5-flash-native-audio-preview-12-2025` (Gemini Live API)
+- `gemini-live-2.5-flash-native-audio` (Vertex AI)
 
 Set the model via `DEMO_AGENT_MODEL` in `.env` or modify `app/google_search_agent/agent.py`.
 

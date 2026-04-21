@@ -1,7 +1,7 @@
 name: checks
 
 on:
-  pull_request:
+  pull_request_target:
 
 jobs:
   # JOB 1: Discover which specific agent folders have changed.
@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Get changed files
         id: changed_files
@@ -30,10 +31,15 @@ jobs:
           TEMP_JSON_FILE=$(mktemp)
           echo "[]" > "$TEMP_JSON_FILE"
 
-          echo "${{ steps.changed_files.outputs.all_changed_files }}" | \
+          echo "${STEPS_CHANGED_FILES_OUTPUTS_ALL_CHANGED_FILES}" | \
           grep -o 'python/agents/[^/]*' | \
           sort -u | \
           while read -r dir; do
+            if [ -f "$dir/.testignore" ]; then
+              echo "Skipping tests for $dir becuase .testignore is present."
+              continue
+            fi
+
             if [ -f "$dir/pyproject.toml" ]; then
               # Check if the pyproject.toml contains [tool.agent-starter-pack] section
               if grep -q '\[tool\.agent-starter-pack\]' "$dir/pyproject.toml"; then
@@ -57,6 +63,8 @@ jobs:
 
           echo "Detected changes in allow list agents: $matrix_json"
           echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
+        env:
+          STEPS_CHANGED_FILES_OUTPUTS_ALL_CHANGED_FILES: ${{ steps.changed_files.outputs.all_changed_files }}
 
   # JOB 2: Build, test, and interact with GCP for each changed agent.
   test-agent-template:
@@ -79,6 +87,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'

@@ -1,13 +1,30 @@
-import datetime, uuid
-from zoneinfo import ZoneInfo
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import datetime
 import os
+import uuid
+from zoneinfo import ZoneInfo
+
 import google.auth
-from .sub_agents.prompt import image_generation_prompt_agent 
-from .sub_agents.image import image_generation_agent 
-from .sub_agents.scoring import scoring_images_prompt 
-from .checker_agent import checker_agent_instance
-from google.adk.agents import SequentialAgent, LoopAgent
+from google.adk.agents import LoopAgent, SequentialAgent
 from google.adk.agents.callback_context import CallbackContext
+
+from .checker_agent import checker_agent_instance
+from .sub_agents.image import image_generation_agent
+from .sub_agents.prompt import image_generation_prompt_agent
+from .sub_agents.scoring import scoring_images_prompt
 
 # To use AI Studio credentials:
 # 1. Create a .env file in the /app directory with:
@@ -16,7 +33,7 @@ from google.adk.agents.callback_context import CallbackContext
 # 2. This will override the default Vertex AI configuration
 _, project_id = google.auth.default()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
-os.environ["GOOGLE_CLOUD_LOCATION"] = "global"
+os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
 os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
 
 
@@ -43,7 +60,6 @@ def set_session(callback_context: CallbackContext):
 
 image_generation_scoring_agent = SequentialAgent(
     name="image_generation_scoring_agent",
-
     description=(
         """
         Analyzes a input text and creates the image generation prompt, generates the relevant images with imagen3 and scores the images."
@@ -52,7 +68,11 @@ image_generation_scoring_agent = SequentialAgent(
         3. Invoke the scoring_images_prompt agent to score the images
             """
     ),
-    sub_agents=[image_generation_prompt_agent, image_generation_agent, scoring_images_prompt],
+    sub_agents=[
+        image_generation_prompt_agent,
+        image_generation_agent,
+        scoring_images_prompt,
+    ],
 )
 
 

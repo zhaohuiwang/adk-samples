@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,28 +14,29 @@
 
 """Demonstration of Travel AI Conceirge using Agent Development Kit"""
 
-from google.adk.agents import Agent
 import uuid
-from travel_concierge import prompt
 
+from google.adk.agents import Agent
+from openinference.instrumentation import using_session
+
+from travel_concierge import prompt
 from travel_concierge.sub_agents.booking.agent import booking_agent
 from travel_concierge.sub_agents.in_trip.agent import in_trip_agent
 from travel_concierge.sub_agents.inspiration.agent import inspiration_agent
 from travel_concierge.sub_agents.planning.agent import planning_agent
 from travel_concierge.sub_agents.post_trip.agent import post_trip_agent
 from travel_concierge.sub_agents.pre_trip.agent import pre_trip_agent
-
 from travel_concierge.tools.memory import _load_precreated_itinerary
-
 from travel_concierge.tracing import instrument_adk_with_arize
-from openinference.instrumentation import using_session
+
+from . import MODEL
 
 _ = instrument_adk_with_arize()
 
 
 with using_session(session_id=uuid.uuid4()):
     root_agent = Agent(
-        model="gemini-2.0-flash-001",
+        model=MODEL,
         name="root_agent",
         description="A Travel Conceirge using the services of multiple sub-agents",
         instruction=prompt.ROOT_AGENT_INSTR,

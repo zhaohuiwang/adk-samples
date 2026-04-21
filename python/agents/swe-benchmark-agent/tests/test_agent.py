@@ -15,8 +15,12 @@
 """Integration tests for SWE Agent."""
 
 import unittest
+from typing import Any
 
-from swe_agent.orchestrator import Orchestrator
+from swe_benchmark_agent.orchestrator import (
+    MAX_VERIFICATION_TURN_COUNT,
+    Orchestrator,
+)
 
 
 class MockEnvironment:
@@ -79,7 +83,9 @@ class TestSweAgent(unittest.TestCase):
 
     def test_orchestrator_terminalbench_initialization(self) -> None:
         """Test orchestrator initialization for terminalbench."""
-        orchestrator = Orchestrator(self.mock_env, benchmark_type="terminalbench")
+        orchestrator = Orchestrator(
+            self.mock_env, benchmark_type="terminalbench"
+        )
 
         self.assertEqual(orchestrator.benchmark_type, "terminalbench")
         self.assertEqual(orchestrator.working_dir, "/app")
@@ -88,11 +94,15 @@ class TestSweAgent(unittest.TestCase):
         """Test reading a file range."""
         orchestrator = Orchestrator(self.mock_env, benchmark_type="swebench")
 
-        result = orchestrator.read_file_range("test.py", start_line=1, end_line=2)
+        result = orchestrator.read_file_range(
+            "test.py", start_line=1, end_line=2
+        )
 
         self.assertIn("test.py", result)
         self.assertIn("def hello():", result)
-        self.assertTrue(any("cat" in cmd for cmd in self.mock_env.commands_executed))
+        self.assertTrue(
+            any("cat" in cmd for cmd in self.mock_env.commands_executed)
+        )
 
     def test_run_shell_command(self) -> None:
         """Test running a shell command."""
@@ -101,7 +111,9 @@ class TestSweAgent(unittest.TestCase):
         result = orchestrator.run_shell_command("ls -la")
 
         self.assertIn("Command exited with status", result)
-        self.assertTrue(any("ls -la" in cmd for cmd in self.mock_env.commands_executed))
+        self.assertTrue(
+            any("ls -la" in cmd for cmd in self.mock_env.commands_executed)
+        )
 
     def test_submit_swebench(self) -> None:
         """Test submission for swebench."""
